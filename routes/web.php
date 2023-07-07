@@ -13,6 +13,16 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
+Route::get('/', [\App\Http\Controllers\Auth\LoginController::class, 'index'])                           ->name('login');
+Route::post('/login', [\App\Http\Controllers\Auth\LoginController::class, 'login'])                     ->name('login.login');
+Route::get('/logout', [\App\Http\Controllers\Auth\LoginController::class, 'logout'])                    ->name('login.logout');
+
+Route::get('/register', [\App\Http\Controllers\Auth\RegisterController::class, 'index'])      ->name('register.index');
+Route::post('/register', [\App\Http\Controllers\Auth\RegisterController::class, 'register'])  ->name('register.register');
+
+Route::resource('categories', \App\Http\Controllers\Admin\CategoryController::class);
+Route::resource('products', \App\Http\Controllers\Admin\ProductController::class);
+Route::resource('users', \App\Http\Controllers\Admin\UserController::class);
+
+
+Route::middleware('auth')->get('/dashboard', [\App\Http\Controllers\Admin\AdminController::class, 'index']) ->name('admin.index');
